@@ -283,7 +283,7 @@ join public.survey_campaigns c on c.school_id = t.school_id and c.title = '기�
 insert into public.participant_tokens (
   campaign_id, code_hash, code_hint, submitted_at, last_saved_at, legacy_session_id, created_at
 )
-select c.id, encode(digest('legacy:' || ss.id::text, 'sha256'), 'hex'), '기존',
+select c.id, encode(extensions.digest('legacy:' || ss.id::text, 'sha256'), 'hex'), '기존',
   ss.submitted_at, coalesce(ss.submitted_at, ss.created_at), ss.id, ss.created_at
 from public.survey_sessions ss
 join public.survey_campaigns c on c.school_id = ss.school_id and c.title = '기존 설문';

@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "학교 업무 IPA 평가",
   description: "학교 코드로 설문에 참여하고, 관리자는 중요도·수행도(IPA) 결과를 분석합니다.",
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({

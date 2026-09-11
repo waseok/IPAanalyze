@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 학교 업무 IPA
 
-## Getting Started
+학교 관리자가 업무 목록과 설문 회차를 만들고, 교직원이 익명 참여코드로 중요도·수행도를 평가하는 운영용 웹앱입니다.
 
-First, run the development server:
+## 주요 기능
+
+- PDF·Excel 업무분장 문서의 로컬 규칙 기반 업무 추출
+- 회차별 문항 스냅샷과 시작·마감 관리
+- 원문을 저장하지 않는 응답자별 익명 참여코드
+- 마감 전 응답 수정, 미사용 코드 폐기
+- 중요도·수행도 IPA 산점도와 포인트 툴팁
+- 결과 Excel 다운로드와 인쇄/PDF 출력
+- 회차 보관 및 개인정보 보존 기간 종료 후 영구 삭제
+
+## 로컬 실행
+
+Node.js 22를 사용합니다. `.env.example`을 `.env.local`로 복사하고 값을 설정합니다.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 환경 변수
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_EMAIL_ALLOWLIST`
+- `APP_URL`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`SUPABASE_SERVICE_ROLE_KEY`는 서버 전용입니다. 브라우저 코드, 로그, 저장소에 노출하지 마세요.
 
-## Learn More
+## 데이터베이스
 
-To learn more about Next.js, take a look at the following resources:
+staging에서 먼저 검증한 뒤 운영 프로젝트에 마이그레이션을 적용합니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx supabase db push --dry-run
+npx supabase db push
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 품질 점검
 
-## Deploy on Vercel
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm audit --omit=dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+상세 배포 순서, 개인정보 보존, 장애 대응, 11월 실행 체크포인트는 [`docs/operations.md`](docs/operations.md)를 참고하세요.

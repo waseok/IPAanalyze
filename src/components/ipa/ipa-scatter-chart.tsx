@@ -51,10 +51,10 @@ export function IpaScatterChart({ data }: Props) {
 
   return (
     <div className="w-full space-y-2 overflow-x-auto">
+      <div className="relative w-[800px] max-w-full">
       <svg
-        width={W}
-        height={H}
-        className="max-w-full font-sans text-foreground"
+        viewBox={`0 0 ${W} ${H}`}
+        className="h-auto w-full font-sans text-foreground"
         role="img"
         aria-label="중요도 수행도 산점도"
       >
@@ -103,7 +103,18 @@ export function IpaScatterChart({ data }: Props) {
           const active = hoverId === p.taskId;
           const theme = QUADRANT_THEME[p.quadrant as QuadrantKey];
           return (
-            <g key={p.taskId}>
+            <g
+              key={p.taskId}
+              tabIndex={0}
+              role="button"
+              aria-label={`${p.title}, 중요도 ${p.avgImportance.toFixed(2)}, 수행도 ${p.avgPerformance.toFixed(2)}`}
+              className="cursor-pointer outline-none"
+              onMouseEnter={() => setHoverId(p.taskId)}
+              onMouseLeave={() => setHoverId(null)}
+              onFocus={() => setHoverId(p.taskId)}
+              onBlur={() => setHoverId(null)}
+            >
+              <circle cx={cx} cy={cy} r={18} fill="transparent" />
               <circle
                 cx={cx}
                 cy={cy}
@@ -112,9 +123,7 @@ export function IpaScatterChart({ data }: Props) {
                 fillOpacity={active ? 0.95 : 0.78}
                 stroke={theme.stroke}
                 strokeWidth={active ? 2 : 1}
-                className="cursor-pointer transition-[r] duration-150"
-                onMouseEnter={() => setHoverId(p.taskId)}
-                onMouseLeave={() => setHoverId(null)}
+                className="pointer-events-none transition-[r] duration-150"
               >
                 <title>{`${p.title} — 중요도 ${p.avgImportance.toFixed(2)}, 수행도 ${p.avgPerformance.toFixed(2)}, 응답 ${p.responseCount}`}</title>
               </circle>
@@ -159,6 +168,24 @@ export function IpaScatterChart({ data }: Props) {
         </text>
       </svg>
 
+      {hovered ? (
+        <div
+          className="pointer-events-none absolute z-20 w-64 max-w-[70vw] rounded-lg border border-border bg-card p-3 text-xs shadow-xl ring-1 ring-border/40"
+          style={{
+            left: `${(xScale(hovered.avgPerformance) / W) * 100}%`,
+            top: `${Math.max(2, (yScale(hovered.avgImportance) / H) * 100 - 25)}%`,
+            transform: hovered.avgPerformance < 2 ? "translateX(0)" : hovered.avgPerformance > 4 ? "translateX(-100%)" : "translateX(-50%)",
+          }}
+          role="tooltip"
+        >
+          <p className="font-semibold leading-snug text-foreground">{hovered.title}</p>
+          <p className="mt-1 text-muted-foreground">중요도 {hovered.avgImportance.toFixed(2)} · 수행도 {hovered.avgPerformance.toFixed(2)}</p>
+          <p className="text-muted-foreground">집계 응답 수 {hovered.responseCount}</p>
+          <p className="mt-1 font-medium text-foreground">{hovered.quadrant} {quadrantMeta(hovered.quadrant).name} · {quadrantMeta(hovered.quadrant).tagline}</p>
+        </div>
+      ) : null}
+      </div>
+
       <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
         {(["Q1", "Q2", "Q3", "Q4"] as const).map((q) => (
           <span key={q} className="inline-flex items-center gap-1.5">
@@ -169,20 +196,7 @@ export function IpaScatterChart({ data }: Props) {
         ))}
       </div>
 
-      {hovered ? (
-        <div className="max-w-xl rounded-lg border border-border bg-card p-3 text-xs shadow-sm ring-1 ring-border/40">
-          <p className="font-semibold leading-snug text-foreground">{hovered.title}</p>
-          <p className="mt-1 text-muted-foreground">
-            중요도 {hovered.avgImportance.toFixed(2)} · 수행도 {hovered.avgPerformance.toFixed(2)}
-          </p>
-          <p className="text-muted-foreground">집계 응답 수 {hovered.responseCount}</p>
-          <p className="mt-1 font-medium text-foreground">
-            {hovered.quadrant} {quadrantMeta(hovered.quadrant).name} · {quadrantMeta(hovered.quadrant).tagline}
-          </p>
-        </div>
-      ) : (
-        <p className="text-xs text-muted-foreground">점에 마우스를 올리면 업무 요약이 표시됩니다.</p>
-      )}
+      <p className="text-xs text-muted-foreground">점 주변에 마우스를 두거나 Tab 키로 점을 선택하면 업무 요약이 표시됩니다.</p>
     </div>
   );
 }

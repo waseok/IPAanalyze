@@ -8,7 +8,7 @@ export default async function SurveyEntryPage({
   const params = await searchParams;
   const code = String(params.code ?? "").trim();
   if (code) {
-    redirect(`/s/${code}`);
+    redirect(`/join/${encodeURIComponent(code)}`);
   }
   redirect("/");
 }

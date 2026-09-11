@@ -1,0 +1,1 @@
+-- Intentionally empty. Production-like test data should be created through the app.

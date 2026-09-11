@@ -44,8 +44,8 @@ export function TaskUploadForm({ schoolId }: Props) {
     setMessage(null);
     try {
       const result = await parseAndUploadRosterDocument(schoolId, formData);
-      if ("error" in result) setError(result.error);
-      else setMessage(result.success);
+      if ("error" in result) setError(result.error ?? "문서 처리에 실패했습니다.");
+      else setMessage(result.success ?? "업무 목록을 저장했습니다.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "문서 처리 중 오류가 발생했습니다.");
     } finally {
@@ -76,8 +76,7 @@ export function TaskUploadForm({ schoolId }: Props) {
         <BarChart3 className="size-4 text-chart-2" aria-hidden />
         <AlertTitle className="text-base font-bold text-foreground">업무분장 · IPA용 목록</AlertTitle>
         <AlertDescription className="text-muted-foreground">
-          <strong className="font-semibold text-primary">PDF 또는 Excel</strong>만 업로드합니다. 먼저 표 구조를 인식하고, 어려우면{" "}
-          <span className="font-semibold text-foreground/90">OPENAI_API_KEY</span>가 설정된 경우에만 AI로 목록을 정리합니다. 저장 시 기존 업무는{" "}
+          <strong className="font-semibold text-primary">PDF 또는 Excel</strong>만 업로드합니다. 개인정보가 외부 서비스로 전송되지 않도록 규칙 기반으로만 표 구조를 읽습니다. 저장 시 기존 업무는{" "}
           <span className="font-semibold text-destructive/90">전체 교체</span>됩니다. 개별 수정은 학교 대시보드의{" "}
           <span className="font-semibold text-foreground/90">업무 목록</span>에서 하세요.
         </AlertDescription>
@@ -88,7 +87,7 @@ export function TaskUploadForm({ schoolId }: Props) {
           pdf · xlsx · xls
         </Badge>
         <Badge variant="secondary" className="text-[11px] font-semibold">
-          규칙 우선 → AI 보조
+          개인정보 외부 전송 없음
         </Badge>
       </div>
 

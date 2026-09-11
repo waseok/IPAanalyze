@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useEffect, useId, useState } from "react";
-import { signInAdmin, signUpAdmin } from "@/app/actions";
+import { requestPasswordReset, signInAdmin, signUpAdmin } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,18 +18,17 @@ export function AuthForm() {
   const [signUpError, setSignUpError] = useState<string | null>(null);
   const [signInEmail, setSignInEmail] = useState("");
   const [rememberEmail, setRememberEmail] = useState(false);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const remember = localStorage.getItem(LS_REMEMBER) === "1";
-      setRememberEmail(remember);
-      if (remember) {
-        const saved = localStorage.getItem(LS_EMAIL);
-        if (saved) setSignInEmail(saved);
-      }
-    } catch {
-      /* private mode 등 */
-    }
+    const timer = window.setTimeout(() => {
+      try {
+        const remember = localStorage.getItem(LS_REMEMBER) === "1";
+        setRememberEmail(remember);
+        if (remember) setSignInEmail(localStorage.getItem(LS_EMAIL) ?? "");
+      } catch { /* private mode 등 */ }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   async function onSignIn(e: FormEvent<HTMLFormElement>) {
@@ -61,6 +60,12 @@ export function AuthForm() {
     const result = await signUpAdmin(formData);
     if (result?.error) setSignUpError(result.error);
     setSignUpPending(false);
+  }
+
+  async function onReset(formData: FormData) {
+    setResetMessage(null);
+    const result = await requestPasswordReset(formData);
+    setResetMessage(result.success ?? null);
   }
 
   return (
@@ -120,14 +125,24 @@ export function AuthForm() {
               <Input id="sign-up-email" name="email" type="email" required autoComplete="email" />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="sign-up-password">비밀번호 (8자 이상)</Label>
-              <Input id="sign-up-password" name="password" type="password" minLength={8} required autoComplete="new-password" />
+              <Label htmlFor="sign-up-password">비밀번호 (12자 이상, 영문 대·소문자와 숫자 포함)</Label>
+              <Input id="sign-up-password" name="password" type="password" minLength={12} pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{12,}" required autoComplete="new-password" />
             </div>
             {signUpError ? <p className="text-sm text-red-600">{signUpError}</p> : null}
             <Button disabled={signUpPending} type="submit" variant="secondary" className="w-full">
               가입
             </Button>
           </form>
+        </CardContent>
+      </Card>
+      <Card className="md:col-span-2">
+        <CardHeader><CardTitle>비밀번호 재설정</CardTitle></CardHeader>
+        <CardContent>
+          <form action={onReset} className="flex flex-col gap-2 sm:flex-row sm:items-end">
+            <div className="flex-1 space-y-1"><Label htmlFor="reset-email">승인된 관리자 이메일</Label><Input id="reset-email" name="email" type="email" required /></div>
+            <Button type="submit" variant="outline">재설정 메일 보내기</Button>
+          </form>
+          {resetMessage ? <p className="mt-2 text-sm text-muted-foreground">{resetMessage}</p> : null}
         </CardContent>
       </Card>
     </div>

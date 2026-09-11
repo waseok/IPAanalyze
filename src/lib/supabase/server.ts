@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import type { Database } from "@/lib/types";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -11,7 +12,7 @@ export async function createClient() {
     throw new Error("Supabase 환경 변수가 설정되지 않았습니다.");
   }
 
-  return createServerClient(supabaseUrl, supabaseAnonKey, {
+  return createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

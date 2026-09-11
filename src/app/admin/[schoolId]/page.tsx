@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PageWrap } from "@/components/layout/site-chrome";
 import { TaskListEditor } from "@/components/task-list-editor";
+import { CampaignManager, type CampaignSummary } from "@/components/campaign-manager";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UpdateSchoolCodeForm } from "@/components/update-school-code-form";
 import { createClient } from "@/lib/supabase/server";
 
 const sectionTitleClass =
@@ -30,8 +30,30 @@ export default async function SchoolDashboardPage({
     .maybeSingle();
   if (!school) notFound();
 
-  const { data: tasks } = await supabase.from("tasks").select("id, title, position").eq("school_id", schoolId).order("position");
-  const surveyLink = `/s/${school.code}`;
+  const [{ data: tasks }, { data: campaigns }] = await Promise.all([
+    supabase.from("tasks").select("id, title, position").eq("school_id", schoolId).order("position"),
+    supabase.from("survey_campaigns").select("id, title, status, opens_at, closes_at, created_at").eq("school_id", schoolId).order("created_at", { ascending: false }),
+  ]);
+  const campaignIds = (campaigns ?? []).map((campaign) => campaign.id);
+  const [{ data: campaignTasks }, { data: tokens }] = campaignIds.length
+    ? await Promise.all([
+        supabase.from("campaign_tasks").select("campaign_id").in("campaign_id", campaignIds),
+        supabase.from("participant_tokens").select("id, campaign_id, code_hint, created_at, submitted_at, revoked_at").in("campaign_id", campaignIds),
+      ])
+    : [{ data: [] }, { data: [] }];
+  const campaignSummaries: CampaignSummary[] = (campaigns ?? []).map((campaign) => ({
+    id: campaign.id,
+    title: campaign.title,
+    status: campaign.status,
+    opensAt: campaign.opens_at,
+    closesAt: campaign.closes_at,
+    taskCount: (campaignTasks ?? []).filter((row) => row.campaign_id === campaign.id).length,
+    tokenCount: (tokens ?? []).filter((row) => row.campaign_id === campaign.id && !row.revoked_at).length,
+    submittedCount: (tokens ?? []).filter((row) => row.campaign_id === campaign.id && !row.revoked_at && row.submitted_at).length,
+    unusedTokens: (tokens ?? [])
+      .filter((row) => row.campaign_id === campaign.id && !row.revoked_at && !row.submitted_at)
+      .map((row) => ({ id: row.id, hint: row.code_hint, createdAt: row.created_at })),
+  }));
 
   return (
     <main className="flex flex-1 flex-col">
@@ -42,35 +64,6 @@ export default async function SchoolDashboardPage({
           <Link href="/admin">목록으로</Link>
         </Button>
       </header>
-
-      <Card className="border-border/80 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className={sectionTitleClass}>설문 공유 정보</CardTitle>
-          <CardDescription className="text-muted-foreground">교직원에게 안내할 코드와 링크입니다.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-1 text-sm text-foreground/90">
-          <p>
-            <span className="font-semibold text-primary">학교 코드</span>{" "}
-            <span className="rounded bg-muted px-1.5 py-0.5 font-mono font-medium">{school.code}</span>
-          </p>
-          <p>
-            <span className="font-semibold text-primary">설문 링크</span>{" "}
-            <Link href={surveyLink} className="font-medium text-chart-2 underline underline-offset-2 hover:text-chart-2/90">
-              {surveyLink}
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-
-      <Card className="border-border/80 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className={sectionTitleClass}>학교 코드 수정</CardTitle>
-          <CardDescription>6자리 숫자 코드를 변경하면 설문 URL 경로도 함께 바뀝니다.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <UpdateSchoolCodeForm schoolId={school.id} currentCode={school.code} />
-        </CardContent>
-      </Card>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Button asChild className="h-10 font-semibold">
@@ -93,7 +86,20 @@ export default async function SchoolDashboardPage({
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <TaskListEditor schoolId={school.id} tasks={tasks ?? []} />
+          <TaskListEditor
+            schoolId={school.id}
+            tasks={(tasks ?? []).map((task, index) => ({ ...task, position: task.position ?? index + 1 }))}
+          />
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary/20 shadow-md ring-1 ring-primary/10">
+        <CardHeader className="border-b border-border/50 bg-primary/[0.06] pb-4">
+          <CardTitle className={`${sectionTitleClass} border-primary`}>설문 회차와 참여코드</CardTitle>
+          <CardDescription>회차를 열면 현재 업무 목록이 고정됩니다. 참여코드는 익명 응답자별로 발급됩니다.</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <CampaignManager schoolId={school.id} campaigns={campaignSummaries} />
         </CardContent>
       </Card>
       </PageWrap>

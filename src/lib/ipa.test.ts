@@ -25,4 +25,14 @@ describe("buildIpaResult", () => {
     expect(result.quadrants.Q3).toHaveLength(1);
     expect(result.quadrants.Q4).toHaveLength(1);
   });
+
+  it("응답이 없는 업무는 기준선과 분면에서 제외한다", () => {
+    const result = buildIpaResult([
+      { taskId: "1", title: "응답 있음", avgImportance: 4, avgPerformance: 2, responseCount: 3 },
+      { taskId: "2", title: "응답 없음", avgImportance: 0, avgPerformance: 0, responseCount: 0 },
+    ]);
+    expect(result.xCutoff).toBe(2);
+    expect(result.yCutoff).toBe(4);
+    expect(result.points.map((point) => point.taskId)).toEqual(["1"]);
+  });
 });

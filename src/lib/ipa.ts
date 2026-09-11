@@ -40,16 +40,17 @@ export function buildIpaResult(
   mode: "average" | "fixed" = "average",
   fixedCutoff = DEFAULT_CUTOFF,
 ): IpaResult {
+  const ratedTasks = tasks.filter((task) => task.responseCount > 0);
   const xCutoff =
-    mode === "average" && tasks.length > 0
-      ? round2(tasks.reduce((sum, task) => sum + task.avgPerformance, 0) / tasks.length)
+    mode === "average" && ratedTasks.length > 0
+      ? round2(ratedTasks.reduce((sum, task) => sum + task.avgPerformance, 0) / ratedTasks.length)
       : fixedCutoff;
   const yCutoff =
-    mode === "average" && tasks.length > 0
-      ? round2(tasks.reduce((sum, task) => sum + task.avgImportance, 0) / tasks.length)
+    mode === "average" && ratedTasks.length > 0
+      ? round2(ratedTasks.reduce((sum, task) => sum + task.avgImportance, 0) / ratedTasks.length)
       : fixedCutoff;
 
-  const points = tasks.map((task) => ({
+  const points = ratedTasks.map((task) => ({
     ...task,
     quadrant: classifyQuadrant(task.avgImportance, task.avgPerformance, xCutoff, yCutoff),
   }));

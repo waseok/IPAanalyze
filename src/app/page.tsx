@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { BarChart3, Building2, ClipboardList } from "lucide-react";
 
-export default function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const params = await searchParams;
   return (
     <main className="flex flex-1 flex-col">
       <PageWrap max="xl" className="flex flex-col gap-10">
@@ -35,20 +36,20 @@ export default function Home() {
                 <ClipboardList className="size-5 shrink-0" aria-hidden />
                 <CardTitle className="font-heading text-xl">교직원 설문 참여</CardTitle>
               </div>
-              <CardDescription className="text-pretty">학교에서 안내한 6자리 코드로 바로 설문에 들어갑니다.</CardDescription>
+              <CardDescription className="text-pretty">학교에서 받은 개인 참여코드나 링크로 익명 설문에 들어갑니다.</CardDescription>
             </CardHeader>
             <CardContent>
               <form action="/s" className="flex flex-col gap-3 sm:flex-row sm:items-end">
                 <div className="flex-1 space-y-1.5">
                   <label htmlFor="school-code" className="text-xs font-medium text-muted-foreground">
-                    학교 코드
+                    참여코드
                   </label>
                   <Input
                     id="school-code"
                     name="code"
-                    placeholder="예: 123456"
-                    maxLength={6}
-                    pattern="[0-9]{6}"
+                    placeholder="예: AB234-CD567"
+                    maxLength={11}
+                    pattern="[2-9A-HJ-KM-NP-Za-hj-km-np-z]{5}-?[2-9A-HJ-KM-NP-Za-hj-km-np-z]{5}"
                     required
                     className="font-mono text-base tracking-widest"
                   />
@@ -57,6 +58,7 @@ export default function Home() {
                   입장
                 </Button>
               </form>
+              {params.error === "invalid-code" ? <p className="mt-3 text-sm font-medium text-destructive">유효하지 않은 참여코드입니다. 안내받은 코드를 다시 확인해주세요.</p> : null}
             </CardContent>
           </Card>
 

@@ -1,18 +1,14 @@
 import { createHash, randomInt } from "node:crypto";
 
-const ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
-export const PARTICIPANT_CODE_LENGTH = 10;
+/** 참여코드: 숫자 6자리만 (입력·안내 단순화) */
+export const PARTICIPANT_CODE_LENGTH = 6;
 
 export function normalizeParticipantCode(value: string) {
-  return value.toUpperCase().replace(/[^2-9A-HJKMNP-Z]/g, "").slice(0, PARTICIPANT_CODE_LENGTH);
+  return value.replace(/\D/g, "").slice(0, PARTICIPANT_CODE_LENGTH);
 }
 
 export function generateParticipantCode() {
-  let code = "";
-  for (let i = 0; i < PARTICIPANT_CODE_LENGTH; i += 1) {
-    code += ALPHABET[randomInt(0, ALPHABET.length)];
-  }
-  return code;
+  return String(randomInt(0, 1_000_000)).padStart(PARTICIPANT_CODE_LENGTH, "0");
 }
 
 export function hashParticipantCode(code: string) {
@@ -20,6 +16,5 @@ export function hashParticipantCode(code: string) {
 }
 
 export function formatParticipantCode(code: string) {
-  const normalized = normalizeParticipantCode(code);
-  return `${normalized.slice(0, 5)}-${normalized.slice(5)}`;
+  return normalizeParticipantCode(code);
 }

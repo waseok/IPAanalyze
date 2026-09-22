@@ -36,22 +36,22 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
                 <ClipboardList className="size-5 shrink-0" aria-hidden />
                 <CardTitle className="font-heading text-xl">교직원 설문 참여</CardTitle>
               </div>
-              <CardDescription className="text-pretty">학교에서 받은 개인 참여코드나 링크로 익명 설문에 들어갑니다.</CardDescription>
+              <CardDescription className="text-pretty">학교에서 받은 숫자 6자리 참여코드로 익명 설문에 들어갑니다.</CardDescription>
             </CardHeader>
             <CardContent>
-              <form action="/s" className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <form action="/s" className="flex flex-col gap-3 sm:flex-row sm:items-end" noValidate>
                 <div className="flex-1 space-y-1.5">
                   <label htmlFor="school-code" className="text-xs font-medium text-muted-foreground">
-                    참여코드
+                    참여코드 (숫자 6자리)
                   </label>
                   <Input
                     id="school-code"
                     name="code"
-                    placeholder="예: AB234-CD567"
-                    maxLength={11}
-                    pattern="[2-9A-HJ-KM-NP-Za-hj-km-np-z]{5}-?[2-9A-HJ-KM-NP-Za-hj-km-np-z]{5}"
+                    inputMode="numeric"
+                    placeholder="예: 482193"
+                    maxLength={6}
                     required
-                    className="font-mono text-base tracking-widest"
+                    className="font-mono text-base tracking-[0.35em]"
                   />
                 </div>
                 <Button type="submit" className="shrink-0 sm:min-w-[5rem]">

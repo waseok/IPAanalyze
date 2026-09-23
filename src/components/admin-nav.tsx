@@ -2,35 +2,53 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Building2, ClipboardList } from "lucide-react";
 
 const nav = [
-  { href: "/admin", label: "학교", icon: Building2, match: (path: string) => path === "/admin" || /^\/admin\/[^/]+(\/|$)/.test(path) && !path.startsWith("/admin/rounds") },
-  { href: "/admin/rounds", label: "설문 회차", icon: ClipboardList, match: (path: string) => path.startsWith("/admin/rounds") },
+  {
+    href: "/admin",
+    label: "학교",
+    icon: Building2,
+    match: (path: string) =>
+      path === "/admin" || (/^\/admin\/[^/]+(\/|$)/.test(path) && !path.startsWith("/admin/rounds")),
+  },
+  {
+    href: "/admin/rounds",
+    label: "설문 회차",
+    icon: ClipboardList,
+    match: (path: string) => path.startsWith("/admin/rounds"),
+  },
 ] as const;
 
 export function AdminNav() {
   const pathname = usePathname() ?? "";
 
   return (
-    <nav className="flex items-center gap-1" aria-label="관리자 메뉴">
+    <nav className="flex items-center gap-0.5" aria-label="관리자 메뉴">
       {nav.map((item) => {
         const active = item.match(pathname);
         return (
-          <Button
+          <Link
             key={item.href}
-            asChild
-            variant={active ? "secondary" : "ghost"}
-            size="sm"
-            className={cn("gap-1.5 font-medium", active && "ring-1 ring-primary/25")}
+            href={item.href}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "relative inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              active
+                ? "bg-teal/10 text-teal"
+                : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+            )}
           >
-            <Link href={item.href} aria-current={active ? "page" : undefined}>
-              <item.icon className="size-3.5" aria-hidden />
-              {item.label}
-            </Link>
-          </Button>
+            <item.icon className="size-3.5" aria-hidden />
+            {item.label}
+            {active ? (
+              <span
+                aria-hidden
+                className="absolute inset-x-2 -bottom-[0.65rem] hidden h-0.5 rounded-sm bg-teal sm:block"
+              />
+            ) : null}
+          </Link>
         );
       })}
     </nav>

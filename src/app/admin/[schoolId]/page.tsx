@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createClient } from "@/lib/supabase/server";
 
 const sectionTitleClass =
-  "border-l-4 border-primary pl-3 text-lg font-bold tracking-tight text-foreground";
+  "border-l-[3px] border-teal pl-3 font-heading text-lg font-semibold tracking-tight text-foreground";
 
 export default async function SchoolDashboardPage({
   params,
@@ -34,28 +34,33 @@ export default async function SchoolDashboardPage({
   return (
     <main className="flex flex-1 flex-col">
       <PageWrap max="lg" className="flex flex-col gap-6">
-        <header className="flex items-center justify-between gap-4 border-b border-border/60 pb-4">
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl">{school.name}</h1>
+        <header className="flex items-center justify-between gap-4 border-b border-border/70 pb-5">
+          <div className="space-y-1">
+            <p className="font-heading text-sm font-semibold text-teal">학교 업무 IPA</p>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              {school.name}
+            </h1>
+          </div>
           <Button asChild variant="outline">
             <Link href="/admin">목록으로</Link>
           </Button>
         </header>
 
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Button asChild className="h-10 font-semibold">
+        <div className="grid gap-2.5 sm:grid-cols-3">
+          <Button asChild className="h-10 font-medium">
             <Link href={`/admin/${school.id}/upload`}>업무 일괄 업로드</Link>
           </Button>
-          <Button asChild variant="secondary" className="h-10 font-semibold">
+          <Button asChild variant="secondary" className="h-10 font-medium">
             <Link href={`/admin/rounds?school=${school.id}`}>설문 회차 · 참여코드</Link>
           </Button>
-          <Button asChild variant="outline" className="h-10 font-semibold">
+          <Button asChild variant="outline" className="h-10 font-medium">
             <Link href={`/admin/${school.id}/results`}>IPA 결과</Link>
           </Button>
         </div>
 
-        <Card className="border-primary/20 shadow-md ring-1 ring-primary/10">
-          <CardHeader className="border-b border-border/50 bg-primary/[0.06] pb-4 dark:bg-primary/10">
-            <CardTitle className={`${sectionTitleClass} border-primary`}>업무 목록</CardTitle>
+        <Card className="border-0 shadow-none ring-1 ring-border/60">
+          <CardHeader className="border-b border-border/50 bg-teal/[0.04] pb-4">
+            <CardTitle className={`${sectionTitleClass} border-teal`}>업무 목록</CardTitle>
             <CardDescription>
               설문 문항이 되는 업무입니다. 회차·참여코드는{" "}
               <Link href={`/admin/rounds?school=${school.id}`} className="font-semibold text-primary underline underline-offset-2">

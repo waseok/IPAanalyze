@@ -74,6 +74,7 @@ export async function createSurveyCampaign(formData: FormData) {
   });
   if (error) return { error: error.message };
   revalidatePath(`/admin/${parsed.data.schoolId}`);
+  revalidatePath("/admin/rounds");
   return { success: "설문 회차를 만들었습니다." };
 }
 

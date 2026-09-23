@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { PageWrap } from "@/components/layout/site-chrome";
 import { CampaignManager, type CampaignSummary } from "@/components/campaign-manager";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, Plus } from "lucide-react";
 
 async function loadCampaignSummaries(schoolId: string) {
   const supabase = await createClient();
@@ -92,11 +93,14 @@ export default async function RoundsPage({
           </p>
         ) : (
           <>
-            <div className="flex flex-wrap gap-2">
+            {/* 학교명은 선택 칩에만 표시(중복 h2 제거) */}
+            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="학교 선택">
               {schools.map((school) => (
                 <Link
                   key={school.id}
                   href={`/admin/rounds?school=${school.id}`}
+                  role="tab"
+                  aria-selected={school.id === selectedId}
                   className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
                     school.id === selectedId
                       ? "border-primary/40 bg-primary/10 text-primary"
@@ -110,7 +114,12 @@ export default async function RoundsPage({
             {selectedSchool ? (
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="font-heading text-lg font-bold">{selectedSchool.name}</h2>
+                  <Button asChild size="sm" className="gap-1.5">
+                    <Link href={`/admin/rounds/new?school=${selectedSchool.id}`}>
+                      <Plus className="size-3.5" aria-hidden />
+                      새 설문 회차
+                    </Link>
+                  </Button>
                   <Link href={`/admin/${selectedSchool.id}`} className="text-sm text-primary underline-offset-2 hover:underline">
                     업무 목록으로
                   </Link>

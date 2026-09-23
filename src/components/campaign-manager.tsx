@@ -41,6 +41,104 @@ function showDate(value: string | null) {
   return value ? new Date(value).toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" }) : "미설정";
 }
 
+/** 설문 회차 생성 폼. 시작/마감은 편의상 지금·7일 후 기본값(의도된 동작). */
+export function CampaignCreateForm({
+  schoolId,
+  onCreated,
+}: {
+  schoolId: string;
+  /** 생성 성공 후 호출(리다이렉트 등). 없으면 refresh만 수행. */
+  onCreated?: () => void;
+}) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  async function create(formData: FormData) {
+    setBusy(true);
+    setError(null);
+    setMessage(null);
+    for (const field of ["opensAt", "closesAt"]) {
+      const value = String(formData.get(field) ?? "");
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime())) formData.set(field, date.toISOString());
+    }
+    const result = await createSurveyCampaign(formData);
+    if (result.error) setError(result.error);
+    else {
+      setMessage(result.success ?? null);
+      router.refresh();
+      onCreated?.();
+    }
+    setBusy(false);
+  }
+
+  return (
+    <div className="space-y-4">
+      <form
+        action={create}
+        autoComplete="off"
+        className="grid gap-3 rounded-lg border border-primary/20 bg-primary/[0.04] p-4 md:grid-cols-2"
+      >
+        <input type="hidden" name="schoolId" value={schoolId} />
+        <div className="space-y-1.5 md:col-span-2">
+          <Label htmlFor="campaign-title">회차명</Label>
+          <Input
+            id="campaign-title"
+            name="title"
+            placeholder="예: 2026년 1학기 업무 IPA"
+            required
+            maxLength={80}
+            autoComplete="off"
+          />
+          <p className="text-xs text-muted-foreground">
+            만든 뒤 「설문 열기」→ 참여코드(숫자 6자리) Excel 발급만 하면 됩니다.
+          </p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="campaign-opens">시작 시각</Label>
+          <Input
+            id="campaign-opens"
+            name="opensAt"
+            type="datetime-local"
+            defaultValue={localInputDate(0)}
+            required
+            autoComplete="off"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="campaign-closes">마감 시각</Label>
+          <Input
+            id="campaign-closes"
+            name="closesAt"
+            type="datetime-local"
+            defaultValue={localInputDate(7)}
+            required
+            autoComplete="off"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground md:col-span-2">
+          기본값: 지금 ~ 7일 후(변경 가능). 회차명·시각은 자동으로 확정되지 않으며, 제출해야 회차가 만들어집니다.
+        </p>
+        <Button type="submit" disabled={busy} className="md:col-span-2">
+          {busy ? "생성 중…" : "새 설문 회차 만들기"}
+        </Button>
+      </form>
+      {error ? (
+        <p className="text-sm font-medium text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
+      {message ? (
+        <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400" role="status">
+          {message}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function CampaignCard({
   schoolId,
   campaign,
@@ -148,24 +246,6 @@ export function CampaignManager({ schoolId, campaigns }: { schoolId: string; cam
     return { active: activeList, archived: archivedList };
   }, [campaigns]);
 
-  async function create(formData: FormData) {
-    setBusyId("create");
-    setError(null);
-    setMessage(null);
-    for (const field of ["opensAt", "closesAt"]) {
-      const value = String(formData.get(field) ?? "");
-      const date = new Date(value);
-      if (!Number.isNaN(date.getTime())) formData.set(field, date.toISOString());
-    }
-    const result = await createSurveyCampaign(formData);
-    if (result.error) setError(result.error);
-    else {
-      setMessage(result.success ?? null);
-      router.refresh();
-    }
-    setBusyId(null);
-  }
-
   async function change(id: string, next: "open" | "closed" | "archived") {
     setBusyId(id);
     setError(null);
@@ -231,26 +311,6 @@ export function CampaignManager({ schoolId, campaigns }: { schoolId: string; cam
 
   return (
     <div className="space-y-6">
-      <form action={create} className="grid gap-3 rounded-lg border border-primary/20 bg-primary/[0.04] p-4 md:grid-cols-2">
-        <input type="hidden" name="schoolId" value={schoolId} />
-        <div className="space-y-1.5 md:col-span-2">
-          <Label htmlFor="campaign-title">회차명</Label>
-          <Input id="campaign-title" name="title" placeholder="예: 2026년 1학기 업무 IPA" required maxLength={80} />
-          <p className="text-xs text-muted-foreground">만든 뒤 「설문 열기」→ 참여코드(숫자 6자리) Excel 발급만 하면 됩니다.</p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="campaign-opens">시작 시각</Label>
-          <Input id="campaign-opens" name="opensAt" type="datetime-local" defaultValue={localInputDate(0)} required />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="campaign-closes">마감 시각</Label>
-          <Input id="campaign-closes" name="closesAt" type="datetime-local" defaultValue={localInputDate(7)} required />
-        </div>
-        <Button type="submit" disabled={busyId === "create"} className="md:col-span-2">
-          {busyId === "create" ? "생성 중…" : "새 설문 회차 만들기"}
-        </Button>
-      </form>
-
       <div className="space-y-3">
         <h3 className="text-sm font-semibold text-foreground">진행·초안·마감 ({active.length})</h3>
         {active.length === 0 ? (

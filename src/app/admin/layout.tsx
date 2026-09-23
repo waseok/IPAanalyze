@@ -1,12 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { AdminNav } from "@/components/admin-nav";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Building2, ClipboardList } from "lucide-react";
-
-const nav = [
-  { href: "/admin", label: "학교", icon: Building2 },
-  { href: "/admin/rounds", label: "설문 회차", icon: ClipboardList },
-] as const;
+import { BarChart3 } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -23,16 +19,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 <p className="hidden text-xs text-muted-foreground sm:block">업무 · 회차 · IPA</p>
               </div>
             </Link>
-            <nav className="flex items-center gap-1" aria-label="관리자 메뉴">
-              {nav.map((item) => (
-                <Button key={item.href} asChild variant="ghost" size="sm" className="gap-1.5 font-medium">
-                  <Link href={item.href}>
-                    <item.icon className="size-3.5" aria-hidden />
-                    {item.label}
-                  </Link>
-                </Button>
-              ))}
-            </nav>
+            <AdminNav />
           </div>
           <Button asChild variant="outline" size="sm">
             <Link href="/">홈으로</Link>

@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PageWrap } from "@/components/layout/site-chrome";
+import { PageHeader, PageWrap } from "@/components/layout/site-chrome";
 import { CampaignManager, type CampaignSummary } from "@/components/campaign-manager";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { ClipboardList, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 async function loadCampaignSummaries(schoolId: string) {
   const supabase = await createClient();
@@ -71,20 +70,19 @@ export default async function RoundsPage({
   return (
     <main className="flex flex-1 flex-col">
       <PageWrap max="lg" className="flex flex-col gap-6">
-        <header className="space-y-2 border-b border-border/60 pb-6">
-          <Badge variant="secondary" className="w-fit gap-1 border-primary/20 bg-primary/10 font-normal text-primary">
-            <ClipboardList className="size-3" aria-hidden />
-            설문 회차
-          </Badge>
-          <h1 className="font-heading text-2xl font-bold tracking-tight md:text-3xl">설문 회차 · 참여코드</h1>
-          <p className="max-w-2xl text-sm text-muted-foreground">
-            회차를 만들고 열면, 교직원에게 줄 <strong className="font-medium text-foreground/90">숫자 6자리 참여코드</strong>를
-            Excel로 발급합니다. 마감 후 보관함에 접어 두고, 필요할 때만 영구 삭제하세요.
-          </p>
-        </header>
+        <PageHeader
+          title="설문 회차 · 참여코드"
+          description={
+            <>
+              회차를 만들고 열면, 교직원에게 줄{" "}
+              <strong className="font-medium text-foreground/90">숫자 6자리 참여코드</strong>를 Excel로 발급합니다. 마감
+              후 보관함에 접어 두고, 필요할 때만 영구 삭제하세요.
+            </>
+          }
+        />
 
         {!schools?.length ? (
-          <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+          <p className="rounded-md border border-dashed border-border/80 p-8 text-center text-sm text-muted-foreground">
             먼저{" "}
             <Link href="/admin" className="font-medium text-primary underline-offset-2 hover:underline">
               학교
@@ -93,7 +91,6 @@ export default async function RoundsPage({
           </p>
         ) : (
           <>
-            {/* 학교명은 선택 칩에만 표시(중복 h2 제거) */}
             <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="학교 선택">
               {schools.map((school) => (
                 <Link
@@ -101,10 +98,10 @@ export default async function RoundsPage({
                   href={`/admin/rounds?school=${school.id}`}
                   role="tab"
                   aria-selected={school.id === selectedId}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                  className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
                     school.id === selectedId
-                      ? "border-primary/40 bg-primary/10 text-primary"
-                      : "border-border/70 bg-card hover:border-primary/25"
+                      ? "border-navy/40 bg-navy/10 text-navy"
+                      : "border-border/70 bg-card hover:border-navy/25"
                   }`}
                 >
                   {school.name}
@@ -120,7 +117,10 @@ export default async function RoundsPage({
                       새 설문 회차
                     </Link>
                   </Button>
-                  <Link href={`/admin/${selectedSchool.id}`} className="text-sm text-primary underline-offset-2 hover:underline">
+                  <Link
+                    href={`/admin/${selectedSchool.id}`}
+                    className="text-sm text-primary underline-offset-2 hover:underline"
+                  >
                     업무 목록으로
                   </Link>
                 </div>

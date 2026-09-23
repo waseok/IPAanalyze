@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Gothic_A1, Noto_Serif_KR } from "next/font/google";
 import { SiteBackdrop } from "@/components/layout/site-chrome";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+/* 본문: 기하학적 한글 산세리프 — 행정 UI 가독성 */
+const body = Gothic_A1({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+/* 브랜드·제목: 세리프 — 학교·기관 신뢰감 */
+const display = Noto_Serif_KR({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -15,8 +24,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "학교 업무 IPA 평가",
-  description: "학교 코드로 설문에 참여하고, 관리자는 중요도·수행도(IPA) 결과를 분석합니다.",
+  title: "학교 업무 IPA",
+  description: "학교 업무의 중요도·수행도를 분석하는 IPA(Importance–Performance Analysis) 운영 도구입니다.",
   robots: { index: false, follow: false },
 };
 
@@ -28,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${body.variable} ${display.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <SiteBackdrop />

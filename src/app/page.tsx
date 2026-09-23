@@ -10,17 +10,17 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
     <main className="flex flex-1 flex-col">
       {/* 히어로: brand + headline + support + CTA + dominant visual — 카드/통계 없음 */}
       <section className="relative flex min-h-[100dvh] flex-col overflow-hidden">
-        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-10 px-4 py-12 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-12 md:px-6 md:py-16">
-          <div className="relative z-10 max-w-xl space-y-7">
-            <p className="motion-fade-up font-heading text-2xl font-semibold tracking-tight text-teal md:text-3xl">
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-8 px-4 py-10 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-10 md:px-6 md:py-14 lg:gap-14">
+          <div className="relative z-10 max-w-xl space-y-6">
+            <p className="motion-fade-up font-heading text-[1.65rem] font-semibold tracking-tight text-teal sm:text-2xl md:text-3xl">
               학교 업무 IPA
             </p>
-            <div className="space-y-4">
-              <h1 className="motion-fade-up motion-delay-1 font-heading text-[1.85rem] font-semibold leading-snug tracking-tight text-foreground md:text-4xl md:leading-tight">
+            <div className="space-y-3.5">
+              <h1 className="motion-fade-up motion-delay-1 font-heading text-[1.55rem] font-semibold leading-snug tracking-tight text-foreground sm:text-[1.85rem] md:text-4xl md:leading-tight">
                 중요도와 수행도로
                 <br className="hidden sm:block" /> 학교 업무의 우선순위를 읽습니다
               </h1>
-              <p className="motion-fade-up motion-delay-2 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
+              <p className="motion-fade-up motion-delay-2 max-w-md text-[0.95rem] leading-relaxed text-muted-foreground md:text-lg">
                 교직원은 6자리 참여코드로 익명 평가에 참여하고, 관리자는 IPA 매트릭스로 개선 지점을 확인합니다.
               </p>
             </div>
@@ -63,12 +63,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
             </div>
           </div>
 
-          <div className="motion-fade-up motion-delay-4 relative flex justify-center md:justify-end">
+          <div className="motion-fade-up motion-delay-4 relative mx-auto flex w-full max-w-[20rem] justify-center sm:max-w-[22rem] md:mx-0 md:max-w-none md:justify-end">
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-8 -z-10 rounded-[40%] bg-[radial-gradient(circle_at_center,oklch(0.72_0.06_205/0.18),transparent_68%)]"
+              className="pointer-events-none absolute -inset-6 -z-10 rounded-[40%] bg-[radial-gradient(circle_at_center,oklch(0.72_0.06_205/0.22),transparent_68%)] md:-inset-10"
             />
-            <IpaHeroVisual className="w-full max-w-[22rem] md:max-w-md" />
+            <IpaHeroVisual className="w-full max-w-md" />
           </div>
         </div>
       </section>

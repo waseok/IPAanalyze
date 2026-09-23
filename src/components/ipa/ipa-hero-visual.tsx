@@ -72,50 +72,99 @@ export function IpaHeroVisual({ className = "" }: { className?: string }) {
           중요도 →
         </text>
 
-        <text
-          x="104"
-          y="100"
-          textAnchor="middle"
-          fill="oklch(0.36 0.09 255)"
-          style={{ fontSize: "11px", fontWeight: 600, fontFamily: "var(--font-display), serif" }}
-        >
-          집중 개선
-        </text>
-        <text
-          x="216"
-          y="100"
-          textAnchor="middle"
-          fill="oklch(0.42 0.08 235)"
-          style={{ fontSize: "11px", fontWeight: 600, fontFamily: "var(--font-display), serif" }}
-        >
-          유지 강화
-        </text>
-        <text
-          x="104"
-          y="220"
-          textAnchor="middle"
-          fill="oklch(0.48 0.03 250)"
-          style={{ fontSize: "11px", fontFamily: "var(--font-body), sans-serif" }}
-        >
-          낮은 우선
-        </text>
-        <text
-          x="216"
-          y="220"
-          textAnchor="middle"
-          fill="oklch(0.48 0.03 250)"
-          style={{ fontSize: "11px", fontFamily: "var(--font-body), sans-serif" }}
-        >
-          과잉 가능
-        </text>
+        {/* 점: 라벨 클리어 존(각 사분면 상단/하단 중앙)을 피해 배치 — 라벨보다 먼저 그려 아래 레이어 */}
+        <circle cx="78" cy="128" r="5.5" className="ipa-dot ipa-dot-1" fill="oklch(0.38 0.1 255)" />
+        <circle cx="138" cy="142" r="4.5" className="ipa-dot ipa-dot-2" fill="oklch(0.42 0.09 255 / 0.9)" />
+        <circle cx="188" cy="136" r="5.5" className="ipa-dot ipa-dot-3" fill="oklch(0.55 0.1 235)" />
+        <circle cx="252" cy="148" r="4.5" className="ipa-dot ipa-dot-4" fill="oklch(0.6 0.09 235 / 0.9)" />
+        <circle cx="72" cy="198" r="4" className="ipa-dot ipa-dot-2" fill="oklch(0.45 0.04 250 / 0.5)" />
+        <circle cx="248" cy="206" r="4" className="ipa-dot ipa-dot-3" fill="oklch(0.5 0.05 240 / 0.45)" />
 
-        {/* 점: 중요도 축 쪽=navy · 수행도 축 쪽=sky */}
-        <circle cx="96" cy="82" r="5.5" className="ipa-dot ipa-dot-1" fill="oklch(0.38 0.1 255)" />
-        <circle cx="122" cy="112" r="4.5" className="ipa-dot ipa-dot-2" fill="oklch(0.42 0.09 255 / 0.9)" />
-        <circle cx="224" cy="90" r="5.5" className="ipa-dot ipa-dot-3" fill="oklch(0.55 0.1 235)" />
-        <circle cx="244" cy="126" r="4.5" className="ipa-dot ipa-dot-4" fill="oklch(0.6 0.09 235 / 0.9)" />
-        <circle cx="84" cy="214" r="4" className="ipa-dot ipa-dot-2" fill="oklch(0.45 0.04 250 / 0.5)" />
-        <circle cx="208" cy="230" r="4" className="ipa-dot ipa-dot-3" fill="oklch(0.5 0.05 240 / 0.45)" />
+        {/* 라벨: 점 위 레이어 + 반투명 백킹으로 가독성 확보 */}
+        <g className="ipa-q-label">
+          <rect
+            x="70"
+            y="58"
+            width="68"
+            height="22"
+            rx="3"
+            fill="oklch(0.99 0.008 245 / 0.92)"
+            stroke="oklch(0.55 0.06 255 / 0.18)"
+            strokeWidth="0.75"
+          />
+          <text
+            x="104"
+            y="73"
+            textAnchor="middle"
+            fill="oklch(0.36 0.09 255)"
+            style={{ fontSize: "11px", fontWeight: 600, fontFamily: "var(--font-display), serif" }}
+          >
+            집중 개선
+          </text>
+        </g>
+        <g className="ipa-q-label">
+          <rect
+            x="182"
+            y="58"
+            width="68"
+            height="22"
+            rx="3"
+            fill="oklch(0.99 0.008 245 / 0.92)"
+            stroke="oklch(0.6 0.07 235 / 0.2)"
+            strokeWidth="0.75"
+          />
+          <text
+            x="216"
+            y="73"
+            textAnchor="middle"
+            fill="oklch(0.42 0.08 235)"
+            style={{ fontSize: "11px", fontWeight: 600, fontFamily: "var(--font-display), serif" }}
+          >
+            유지 강화
+          </text>
+        </g>
+        <g className="ipa-q-label">
+          <rect
+            x="70"
+            y="238"
+            width="68"
+            height="22"
+            rx="3"
+            fill="oklch(0.99 0.008 245 / 0.94)"
+            stroke="oklch(0.55 0.04 250 / 0.16)"
+            strokeWidth="0.75"
+          />
+          <text
+            x="104"
+            y="253"
+            textAnchor="middle"
+            fill="oklch(0.42 0.035 250)"
+            style={{ fontSize: "11px", fontFamily: "var(--font-body), sans-serif" }}
+          >
+            낮은 우선
+          </text>
+        </g>
+        <g className="ipa-q-label">
+          <rect
+            x="182"
+            y="238"
+            width="68"
+            height="22"
+            rx="3"
+            fill="oklch(0.99 0.008 245 / 0.94)"
+            stroke="oklch(0.55 0.04 250 / 0.16)"
+            strokeWidth="0.75"
+          />
+          <text
+            x="216"
+            y="253"
+            textAnchor="middle"
+            fill="oklch(0.42 0.035 250)"
+            style={{ fontSize: "11px", fontFamily: "var(--font-body), sans-serif" }}
+          >
+            과잉 가능
+          </text>
+        </g>
       </svg>
     </div>
   );

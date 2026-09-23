@@ -206,25 +206,40 @@ export async function updateTaskTitle(schoolId: string, taskId: string, title: s
   return { success: "저장했습니다." };
 }
 
-export async function deleteTask(schoolId: string, taskId: string) {
+async function deleteTasksAndRenumber(schoolId: string, taskIds: string[]) {
   const ctx = await assertSchoolAdmin(schoolId);
   if (ctx.error || !ctx.supabase) return { error: ctx.error };
 
-  const { data: task } = await ctx.supabase.from("tasks").select("id").eq("id", taskId).eq("school_id", schoolId).maybeSingle();
-  if (!task) return { error: "업무를 찾을 수 없습니다." };
+  const uniqueIds = [...new Set(taskIds.filter(Boolean))];
+  if (uniqueIds.length === 0) return { error: "삭제할 업무를 선택해주세요." };
 
-  // 이미 제출된 설문 응답 중 이 업무에 해당하는 행 제거 → IPA·설문 상세 집계에서 제외 (FK CASCADE와 동일 목적, RLS DELETE 정책 필요)
+  const { data: owned, error: ownedErr } = await ctx.supabase
+    .from("tasks")
+    .select("id")
+    .eq("school_id", schoolId)
+    .in("id", uniqueIds);
+  if (ownedErr) return { error: ownedErr.message };
+  if (!owned?.length) return { error: "업무를 찾을 수 없습니다." };
+  if (owned.length !== uniqueIds.length) return { error: "일부 업무를 찾을 수 없거나 권한이 없습니다." };
+
+  const ids = owned.map((row) => row.id);
+
+  // 이미 제출된 설문 응답 중 이 업무에 해당하는 행 제거 → IPA·설문 상세 집계에서 제외
   const { error: respDelErr } = await ctx.supabase
     .from("responses")
     .delete()
-    .eq("task_id", taskId)
+    .in("task_id", ids)
     .eq("school_id", schoolId);
   if (respDelErr) return { error: respDelErr.message };
 
-  const { error: delErr } = await ctx.supabase.from("tasks").delete().eq("id", taskId).eq("school_id", schoolId);
+  const { error: delErr } = await ctx.supabase.from("tasks").delete().eq("school_id", schoolId).in("id", ids);
   if (delErr) return { error: delErr.message };
 
-  const { data: rest, error: listErr } = await ctx.supabase.from("tasks").select("id").eq("school_id", schoolId).order("position", { ascending: true });
+  const { data: rest, error: listErr } = await ctx.supabase
+    .from("tasks")
+    .select("id")
+    .eq("school_id", schoolId)
+    .order("position", { ascending: true });
   if (listErr) return { error: listErr.message };
 
   for (let i = 0; i < (rest ?? []).length; i += 1) {
@@ -235,7 +250,16 @@ export async function deleteTask(schoolId: string, taskId: string) {
 
   revalidatePath(`/admin/${schoolId}`);
   revalidatePath(`/admin/${schoolId}/results`);
-  return { success: "삭제했습니다." };
+  return { success: ids.length === 1 ? "삭제했습니다." : `${ids.length}개 업무를 삭제했습니다.` };
+}
+
+export async function deleteTask(schoolId: string, taskId: string) {
+  return deleteTasksAndRenumber(schoolId, [taskId]);
+}
+
+/** 선택한 여러 업무를 한 번에 삭제하고 position을 다시 맞춥니다. */
+export async function deleteTasks(schoolId: string, taskIds: string[]) {
+  return deleteTasksAndRenumber(schoolId, taskIds);
 }
 
 /** PDF / Excel 업무분장 — 개인정보를 외부로 보내지 않고 규칙 기반으로 파싱 */

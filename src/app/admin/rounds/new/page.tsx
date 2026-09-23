@@ -44,7 +44,7 @@ export default async function NewRoundPage({
           </div>
           <h1 className="font-heading text-2xl font-semibold tracking-tight md:text-3xl">새 설문 회차</h1>
           <p className="text-sm font-medium text-foreground/90">
-            학교: <span className="text-teal">{selectedSchool.name}</span>
+            학교: <span className="text-navy">{selectedSchool.name}</span>
           </p>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
             회차명과 설문 기간을 입력한 뒤 만들면 됩니다. 상단의 학교·설문 회차 메뉴로 언제든 이동할 수 있습니다.
@@ -61,7 +61,7 @@ export default async function NewRoundPage({
                   <Link
                     key={school.id}
                     href={`/admin/rounds/new?school=${school.id}`}
-                    className="rounded-md border border-border/70 bg-card px-3 py-2 text-sm font-medium transition hover:border-teal/25"
+                    className="rounded-md border border-border/70 bg-card px-3 py-2 text-sm font-medium transition hover:border-navy/25"
                   >
                     {school.name}
                   </Link>

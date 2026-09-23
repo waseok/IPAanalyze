@@ -23,7 +23,7 @@ export default async function CampaignSurveyPage({ params }: { params: Promise<{
     <main className="flex flex-1 flex-col">
       <PageWrap max="md" className="flex flex-col gap-6">
         <header className="space-y-3 border-b border-border/70 pb-6">
-          <p className="font-heading text-sm font-semibold tracking-wide text-teal">학교 업무 IPA · 설문</p>
+          <p className="font-heading text-sm font-semibold tracking-wide text-navy">학교 업무 IPA · 설문</p>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight md:text-3xl">{survey.schoolName}</h1>
             <p className="mt-1.5 text-base font-medium text-foreground/85">{survey.campaignTitle}</p>

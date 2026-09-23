@@ -12,7 +12,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <Link href="/admin" className="group flex min-w-0 items-center gap-3">
               <span
                 aria-hidden
-                className="flex size-9 shrink-0 items-center justify-center rounded-md border border-teal/25 bg-teal/10 font-heading text-sm font-semibold text-teal transition group-hover:border-teal/40"
+                className="flex size-9 shrink-0 items-center justify-center rounded-md border border-navy/25 bg-navy/10 font-heading text-sm font-semibold text-navy transition group-hover:border-navy/40"
               >
                 IPA
               </span>

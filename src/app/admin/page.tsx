@@ -60,7 +60,7 @@ export default async function AdminPage() {
                 <Link
                   key={school.id}
                   href={`/admin/${school.id}`}
-                  className="group flex items-center justify-between gap-3 rounded-md border border-border/80 bg-card/70 px-4 py-3.5 transition hover:border-teal/35 hover:bg-teal/[0.04]"
+                  className="group flex items-center justify-between gap-3 rounded-md border border-border/80 bg-card/70 px-4 py-3.5 transition hover:border-navy/35 hover:bg-navy/[0.04]"
                 >
                   <div className="min-w-0">
                     <p className="font-medium text-foreground">{school.name}</p>
@@ -72,7 +72,7 @@ export default async function AdminPage() {
                     </p>
                   </div>
                   <ChevronRight
-                    className="size-5 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-teal"
+                    className="size-5 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-navy"
                     aria-hidden
                   />
                 </Link>

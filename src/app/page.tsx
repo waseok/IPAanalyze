@@ -12,7 +12,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
       <section className="relative flex min-h-[100dvh] flex-col overflow-hidden">
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-8 px-4 py-10 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-10 md:px-6 md:py-14 lg:gap-14">
           <div className="relative z-10 max-w-xl space-y-6">
-            <p className="motion-fade-up font-heading text-[1.65rem] font-semibold tracking-tight text-teal sm:text-2xl md:text-3xl">
+            <p className="motion-fade-up font-heading text-[1.65rem] font-semibold tracking-tight text-navy sm:text-2xl md:text-3xl">
               학교 업무 IPA
             </p>
             <div className="space-y-3.5">
@@ -66,7 +66,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
           <div className="motion-fade-up motion-delay-4 relative mx-auto flex w-full max-w-[20rem] justify-center sm:max-w-[22rem] md:mx-0 md:max-w-none md:justify-end">
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-6 -z-10 rounded-[40%] bg-[radial-gradient(circle_at_center,oklch(0.72_0.06_205/0.22),transparent_68%)] md:-inset-10"
+              className="pointer-events-none absolute -inset-6 -z-10 rounded-[40%] bg-[radial-gradient(circle_at_center,oklch(0.7_0.08_250/0.2),transparent_68%)] md:-inset-10"
             />
             <IpaHeroVisual className="w-full max-w-md" />
           </div>

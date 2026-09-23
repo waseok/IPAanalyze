@@ -36,7 +36,7 @@ export function AdminNav() {
             className={cn(
               "relative inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
               active
-                ? "bg-teal/10 text-teal"
+                ? "bg-navy/10 text-navy"
                 : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
             )}
           >
@@ -45,7 +45,7 @@ export function AdminNav() {
             {active ? (
               <span
                 aria-hidden
-                className="absolute inset-x-2 -bottom-[0.65rem] hidden h-0.5 rounded-sm bg-teal sm:block"
+                className="absolute inset-x-2 -bottom-[0.65rem] hidden h-0.5 rounded-sm bg-navy sm:block"
               />
             ) : null}
           </Link>

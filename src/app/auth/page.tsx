@@ -8,7 +8,7 @@ export default function AuthPage() {
       <PageWrap max="md" className="flex flex-col gap-6">
         <header className="flex flex-col gap-4 border-b border-border/70 pb-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <p className="font-heading text-sm font-semibold tracking-wide text-teal">학교 업무 IPA</p>
+            <p className="font-heading text-sm font-semibold tracking-wide text-navy">학교 업무 IPA</p>
             <div>
               <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
                 관리자 인증

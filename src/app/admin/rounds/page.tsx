@@ -100,8 +100,8 @@ export default async function RoundsPage({
                   aria-selected={school.id === selectedId}
                   className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
                     school.id === selectedId
-                      ? "border-teal/40 bg-teal/10 text-teal"
-                      : "border-border/70 bg-card hover:border-teal/25"
+                      ? "border-navy/40 bg-navy/10 text-navy"
+                      : "border-border/70 bg-card hover:border-navy/25"
                   }`}
                 >
                   {school.name}

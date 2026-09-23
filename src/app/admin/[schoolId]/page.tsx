@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createClient } from "@/lib/supabase/server";
 
 const sectionTitleClass =
-  "border-l-[3px] border-teal pl-3 font-heading text-lg font-semibold tracking-tight text-foreground";
+  "border-l-[3px] border-navy pl-3 font-heading text-lg font-semibold tracking-tight text-foreground";
 
 export default async function SchoolDashboardPage({
   params,
@@ -36,7 +36,7 @@ export default async function SchoolDashboardPage({
       <PageWrap max="lg" className="flex flex-col gap-6">
         <header className="flex items-center justify-between gap-4 border-b border-border/70 pb-5">
           <div className="space-y-1">
-            <p className="font-heading text-sm font-semibold text-teal">학교 업무 IPA</p>
+            <p className="font-heading text-sm font-semibold text-navy">학교 업무 IPA</p>
             <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
               {school.name}
             </h1>
@@ -59,8 +59,8 @@ export default async function SchoolDashboardPage({
         </div>
 
         <Card className="border-0 shadow-none ring-1 ring-border/60">
-          <CardHeader className="border-b border-border/50 bg-teal/[0.04] pb-4">
-            <CardTitle className={`${sectionTitleClass} border-teal`}>업무 목록</CardTitle>
+          <CardHeader className="border-b border-border/50 bg-navy/[0.04] pb-4">
+            <CardTitle className={`${sectionTitleClass} border-navy`}>업무 목록</CardTitle>
             <CardDescription>
               설문 문항이 되는 업무입니다. 회차·참여코드는{" "}
               <Link href={`/admin/rounds?school=${school.id}`} className="font-semibold text-primary underline underline-offset-2">

@@ -7,11 +7,11 @@ export function SiteBackdrop() {
     <>
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_90%_70%_at_12%_-8%,oklch(0.72_0.06_205/0.22),transparent_55%),radial-gradient(ellipse_70%_50%_at_92%_8%,oklch(0.78_0.08_75/0.12),transparent_50%),linear-gradient(165deg,oklch(0.978_0.01_210)_0%,oklch(0.96_0.012_215)_48%,oklch(0.955_0.014_200)_100%)]"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_90%_70%_at_12%_-8%,oklch(0.7_0.08_250/0.2),transparent_55%),radial-gradient(ellipse_70%_50%_at_92%_8%,oklch(0.75_0.07_235/0.16),transparent_50%),linear-gradient(165deg,oklch(0.978_0.012_245)_0%,oklch(0.96_0.018_248)_48%,oklch(0.952_0.02_242)_100%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.45] [background-image:linear-gradient(oklch(0.55_0.03_220/0.07)_1px,transparent_1px),linear-gradient(90deg,oklch(0.55_0.03_220/0.07)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_85%)]"
+        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.45] [background-image:linear-gradient(oklch(0.5_0.05_255/0.08)_1px,transparent_1px),linear-gradient(90deg,oklch(0.5_0.05_255/0.08)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_85%)]"
       />
       <div
         aria-hidden

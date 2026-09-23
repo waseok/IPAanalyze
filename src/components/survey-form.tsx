@@ -25,13 +25,13 @@ function RatingButtons({
   label: string;
   value: number | null;
   onChange: (value: number) => void;
-  /** 중요도=ochre, 수행도=teal — IPA 축과 시각적으로 연결 */
+  /** 중요도=navy(깊음) · 수행도=sky(밝은 steel) — 블루 패밀리 내 구분 */
   tone: "importance" | "performance";
 }) {
   const activeClass =
     tone === "importance"
-      ? "border-ochre/50 bg-ochre text-ink hover:bg-ochre/90"
-      : "border-teal/50 bg-teal text-primary-foreground hover:bg-teal/90";
+      ? "border-navy/60 bg-navy text-primary-foreground hover:bg-navy/90"
+      : "border-sky/60 bg-sky text-ink hover:bg-sky/90";
 
   return (
     <fieldset className="space-y-2">
@@ -103,7 +103,7 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
 
   return (
     <div className="space-y-6">
-      <Alert className="rounded-md border-teal/25 bg-teal/[0.04] shadow-none">
+      <Alert className="rounded-md border-navy/25 bg-navy/[0.04] shadow-none">
         <CircleHelp className="size-4" />
         <AlertTitle>중요도와 수행도는 이렇게 판단해주세요</AlertTitle>
         <AlertDescription className="mt-2 space-y-2 text-sm leading-relaxed">
@@ -124,7 +124,7 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-medium">평가 진행</span>
           <span className="text-sm tabular-nums text-muted-foreground">
-            <strong className="text-teal">{completed}</strong> / {tasks.length}개 완료
+            <strong className="text-navy">{completed}</strong> / {tasks.length}개 완료
           </span>
         </div>
         <div
@@ -136,7 +136,7 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
           aria-label="평가 완료 비율"
         >
           <span
-            className="block h-full rounded-sm bg-teal transition-[width] duration-300 ease-out"
+            className="block h-full rounded-sm bg-navy transition-[width] duration-300 ease-out"
             style={{ width: `${Math.round(progress * 100)}%` }}
           />
         </div>
@@ -149,7 +149,7 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
             className="scroll-mt-28 space-y-4 rounded-md border border-border/70 bg-card/60 px-4 py-4"
           >
             <h2 className="flex gap-2.5 text-base font-medium leading-snug">
-              <span className="font-mono text-sm font-semibold text-teal tabular-nums">{task.position}</span>
+              <span className="font-mono text-sm font-semibold text-navy tabular-nums">{task.position}</span>
               <span>{task.title}</span>
             </h2>
             <div className="grid gap-5 md:grid-cols-2">
@@ -170,12 +170,12 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
         ))}
       </ol>
 
-      <div className="space-y-3 rounded-md border border-teal/20 bg-muted/25 p-4">
+      <div className="space-y-3 rounded-md border border-navy/20 bg-muted/25 p-4">
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <ShieldCheck className="size-4 text-teal" aria-hidden /> 이름과 이메일은 수집하지 않습니다.
+          <ShieldCheck className="size-4 text-navy" aria-hidden /> 이름과 이메일은 수집하지 않습니다.
         </p>
         {previouslySubmitted ? (
-          <p className="flex items-center gap-2 text-sm font-medium text-teal">
+          <p className="flex items-center gap-2 text-sm font-medium text-navy">
             <Gauge className="size-4" aria-hidden /> 기존 응답을 불러왔습니다. 마감 전까지 수정할 수 있습니다.
           </p>
         ) : null}
@@ -195,7 +195,7 @@ export function SurveyForm({ tasks, previouslySubmitted }: Props) {
           </p>
         ) : null}
         {message ? (
-          <p className="text-sm font-semibold text-teal" role="status">
+          <p className="text-sm font-semibold text-navy" role="status">
             {message}
           </p>
         ) : null}
